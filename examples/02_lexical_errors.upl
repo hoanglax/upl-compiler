@@ -1,0 +1,7 @@
+begin
+  int 1abc;
+  int a1b = 5;
+  int _x;
+  x = 3 < 4;
+  /* comment khong dong
+end

@@ -1,0 +1,8 @@
+begin
+  int a = 1 + 2 * 3 + 4;
+  int b = (1 + 2) * (3 + 4);
+  bool c = a + 1 >= b * 2;
+  bool d = true;
+  bool e = false;
+  print(a + b * 2);
+end

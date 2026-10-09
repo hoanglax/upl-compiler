@@ -1,0 +1,5 @@
+begin
+  int 1abc;
+  int a1b = 5;
+  x = 1 @;
+end
