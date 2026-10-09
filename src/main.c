@@ -2,10 +2,12 @@
 #include <string.h>
 #include "error.h"
 #include "token_name.h"
+#include "ast.h"
 #include "parser.tab.h"
 
 extern FILE *yyin;
 extern char *yytext;
+extern Node *ast_root;
 int yylex(void);
 int yyparse(void);
 
@@ -14,20 +16,22 @@ static void dump_tokens(void) {
     int tok;
     printf("%-8s %-10s %s\n", "LINE:COL", "TOKEN", "LEXEME");
     while ((tok = yylex()) != 0) {
-        printf("%d:%-5d %-10s '%s'\n", yylloc.first_line, yylloc.first_column, token_name(tok), yytext);
+        printf("%d:%-5d %-10s '%s'\n", yylloc.first_line, yylloc.first_column,
+               token_name(tok), yytext);
     }
 }
 
 int main(int argc, char **argv) {
-    int tokens_mode = 0;
+    int tokens_mode = 0, quiet = 0;
     const char *path = NULL;
 
     for (int i = 1; i < argc; i++) {
         if (strcmp(argv[i], "--tokens") == 0) tokens_mode = 1;
+        else if (strcmp(argv[i], "--quiet") == 0) quiet = 1;   /* không in AST */
         else path = argv[i];
     }
     if (!path) {
-        fprintf(stderr, "Usage: %s [--tokens] <file.upl>\n", argv[0]);
+        fprintf(stderr, "Usage: %s [--tokens] [--quiet] <file.upl>\n", argv[0]);
         return 2;
     }
 
@@ -43,8 +47,17 @@ int main(int argc, char **argv) {
 
     if (error_count() > 0) {
         printf("Found %d error(s).\n", error_count());
+        ast_free(ast_root);
         return 1;
     }
-    printf(tokens_mode ? "Lexing OK.\n" : "OK: no errors.\n");
+
+    if (tokens_mode) {
+        printf("Lexing OK.\n");
+        return 0;
+    }
+
+    if (!quiet) ast_print_tree(ast_root);
+    printf("OK: no errors.\n");
+    ast_free(ast_root);
     return 0;
 }

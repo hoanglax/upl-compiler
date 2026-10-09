@@ -1,9 +1,10 @@
 CC     = gcc
-CFLAGS = -Wall -Wextra -g -Isrc/common -Ibuild
+CFLAGS = -Wall -Wextra -g -Isrc/common -Isrc/ast -Ibuild
 BUILD  = build
 TARGET = $(BUILD)/upl
 
-SRCS = src/main.c src/common/error.c src/common/token_name.c
+SRCS = src/main.c src/common/error.c src/common/token_name.c \
+       src/ast/ast.c src/ast/ast_print.c
 OBJS = $(patsubst src/%.c,$(BUILD)/%.o,$(SRCS)) \
        $(BUILD)/parser.tab.o $(BUILD)/lex.yy.o
 
