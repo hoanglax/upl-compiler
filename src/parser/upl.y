@@ -66,12 +66,13 @@ stmt
     | do_while         { $$ = $1; }
     | for_stmt         { $$ = $1; }
     | block            { $$ = $1; }
+    | error ';'        { yyerrok; $$ = NULL; }
     ;
 
 block
     : '{' stmt_list '}'
       {
-          $2->loc = MKLOC(@1.first_line, @1.first_column);             /* vị trí dấu { */
+          $2->loc = MKLOC(@1.first_line, @1.first_column);
           $$ = $2;
       }
     ;
@@ -99,6 +100,10 @@ if_stmt
       { $$ = ast_if(MKLOC(@1.first_line, @1.first_column), $3, $6, NULL); }
     | T_IF '(' expr ')' T_THEN block T_ELSE block
       { $$ = ast_if(MKLOC(@1.first_line, @1.first_column), $3, $6, $8); }
+    | T_IF '(' error ')' T_THEN block
+      { yyerrok; $$ = NULL; }
+    | T_IF '(' error ')' T_THEN block T_ELSE block
+      { yyerrok; $$ = NULL; }
     ;
 
 do_while
@@ -148,5 +153,7 @@ factor
 %%
 
 void yyerror(const char *msg) {
-    error_report("syntax error", yylloc.first_line, yylloc.first_column, msg);
+    /* msg của Bison đã bắt đầu bằng "syntax error, ..." */
+    const char *p = strncmp(msg, "syntax error, ", 14) == 0 ? msg + 14 : msg;
+    error_report("syntax error", yylloc.first_line, yylloc.first_column, p);
 }

@@ -1,0 +1,6 @@
+// EXPECT: 1
+begin
+  int x = 1;
+  if (x > ) then { x = 2; }
+  print(x);
+end

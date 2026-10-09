@@ -18,9 +18,25 @@ run_dir() {
     done
 }
 
+check_errors() {
+    for f in tests/$1/*.upl; do
+        [ -e "$f" ] || continue
+        want=$(grep -m1 -oE 'EXPECT: [0-9]+' "$f" | grep -oE '[0-9]+')
+        [ -n "$want" ] || { echo "SKIP  $f (thiếu // EXPECT: N)"; continue; }
+        got=$("$BIN" "$f" 2>&1 | grep -oE 'Found [0-9]+' | grep -oE '[0-9]+')
+        got=${got:-0}
+        if [ "$got" -eq "$want" ]; then
+            echo "PASS  $f ($got lỗi)"; pass=$((pass+1))
+        else
+            echo "FAIL  $f (báo $got lỗi, mong đợi $want)"; fail=$((fail+1))
+        fi
+    done
+}
+
 run_dir valid 0
 run_dir lexical_errors 1
-run_dir syntax_errors 1
+check_errors syntax_errors
+
 
 echo "----"
 echo "Passed: $pass, Failed: $fail"

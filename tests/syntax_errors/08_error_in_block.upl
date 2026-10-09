@@ -1,0 +1,9 @@
+// EXPECT: 2
+begin
+  int x = 1;
+  if (x > 0) then {
+    x = = 2;
+    print(x);
+  }
+  do { x = x + ; } while (x > 5);
+end

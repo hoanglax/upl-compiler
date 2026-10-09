@@ -1,0 +1,8 @@
+// EXPECT: 3
+begin
+  int x = ;
+  int y = 5;
+  print(;
+  bool z = 1 > 2 > 3;
+  int ok = 1;
+end
