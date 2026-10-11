@@ -28,7 +28,7 @@ LETTER  [A-Za-z]
 
 %%
 
- /* ---------- Từ khóa (phải đứng trước id) ---------- */
+ /* Từ khóa (phải đứng trước id) */
 "begin"   { return T_BEGIN; }
 "end"     { return T_END; }
 "int"     { return T_INT; }
@@ -43,14 +43,14 @@ LETTER  [A-Za-z]
 "true"    { return T_TRUE; }
 "false"   { return T_FALSE; }
 
- /* ---------- Toán tử hai ký tự ---------- */
+ /* Toán tử hai ký tự */
 ">="      { return T_GE; }
 "=="      { return T_EQ; }
 
- /* ---------- Ký tự đơn: trả về chính ký tự ---------- */
+ /*  Ký tự đơn: trả về chính ký tự  */
 "+"|"*"|">"|"="|"("|")"|"{"|"}"|";"   { return yytext[0]; }
 
- /* ---------- Định danh và số ---------- */
+ /* Định danh và số */
 {LETTER}+{DIGIT}*  { yylval.sval = strdup(yytext); return T_ID; }
 
 {DIGIT}+  {
@@ -76,7 +76,7 @@ LETTER  [A-Za-z]
     return T_ID;
 }
 
- /* ---------- Khoảng trắng và comment ---------- */
+ /* Khoảng trắng và comment */
 \n          { yycolumn = 1; }
 [ \t\r]+    { /* bỏ qua */ }
 
@@ -98,7 +98,7 @@ LETTER  [A-Za-z]
     yyterminate();
 }
 
- /* ---------- Ký tự lạ ---------- */
+ /* Ký tự lạ */
 .   {
     char msg[64];
     snprintf(msg, sizeof msg, "unexpected character '%s'", yytext);

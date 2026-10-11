@@ -46,7 +46,7 @@ struct Node {
     } as;
 };
 
-/* ---- Hàm tạo node. loc là vị trí token đầu của cấu trúc ---- */
+/* Hàm tạo node. loc là vị trí token đầu của cấu trúc */
 Node *ast_block(NodeKind kind, Location loc);          /* PROGRAM hoặc BLOCK, rỗng */
 Node *ast_block_add(Node *block, Node *stmt);          /* thêm stmt, trả về block */
 Node *ast_decl(Location loc, VarType type, char *name, Node *init);
@@ -60,7 +60,7 @@ Node *ast_id(Location loc, char *name);
 Node *ast_intlit(Location loc, int value);
 Node *ast_boollit(Location loc, int value);
 
-/* ---- In và giải phóng ---- */
+/* In và giải phóng */
 void ast_print_tree(const Node *root);
 void ast_free(Node *n);
 
